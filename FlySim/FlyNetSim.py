@@ -90,7 +90,7 @@ if __name__ == "__main__":
     gcs_obj = None
 
     time.sleep(0.1)
-    ns_cmd = "xterm -T Network_Simulator -e 'cd " + args.path + " && ./waf --run=\"uav-net-sim\"'"
+    ns_cmd = "xterm -T Network_Simulator -e 'cd " + args.path + " && ./waf --run=\"uav-net-sim-range-test\"'"
     print("[MAIN] Starting the network simulator: " + ns_cmd)
     proc_instance.append(subprocess.Popen(ns_cmd, shell=True))
     time.sleep(3)
