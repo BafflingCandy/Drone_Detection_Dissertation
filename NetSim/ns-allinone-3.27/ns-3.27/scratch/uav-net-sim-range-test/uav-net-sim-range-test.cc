@@ -46,6 +46,13 @@
 #include <cmath>
 
 
+vector <Ptr<MyApp>> appVectCom;
+vector <Ptr<MyApp>> appVectTel;
+
+static uint64_t g_commandRx = 0;
+static uint64_t g_telemetryRx = 0;
+
+
 //code given by chatgpt for helper function
 static void
 PrintDistance (Ptr<Node> uav, Ptr<Node> ap)
@@ -75,6 +82,9 @@ PrintDistance (Ptr<Node> uav, Ptr<Node> ap)
     {
       std::cout << " IN_RANGE";
     }
+
+  std::cout << " CommandRx=" << g_commandRx
+            << " TelemetryRx=" << g_telemetryRx;
 
   std::cout << std::endl;
 
@@ -120,10 +130,6 @@ using namespace ns3;
 
 NS_LOG_COMPONENT_DEFINE ("uav-net-sim");
 
-vector <Ptr<MyApp>> appVectCom;
-vector <Ptr<MyApp>> appVectTel;
-
-
 void RcvPacket(Ptr<Packet> p, Address &addr)
 {
         uint8_t *buffer = new uint8_t[p->GetSize()];
@@ -140,6 +146,13 @@ void RcvPacket(Ptr<Packet> p, Address &addr)
   
         if(string[3] == 'G')   // Packet from GCS to UAV with Control Commands
         {
+	            g_commandRx++;
+
+          std::cout << "[NS3 RX][COMMAND]"
+                    << " Time=" << Simulator::Now().GetSeconds()
+                    << "s Size=" << p->GetSize()
+                    << " TotalCommandRx=" << g_commandRx
+                    << std::endl; //new function added here
           zmq_msg_t message;
           zmq_msg_init_size (&message, strlen (string));
           memcpy (zmq_msg_data (&message), string, strlen (string));
@@ -188,6 +201,14 @@ void RcvPacket(Ptr<Packet> p, Address &addr)
         }
         else if (string[3] == 'U')  // Telemetry Packets from UAV to GCS
         {
+	  
+	  g_telemetryRx++;
+
+          std::cout << "[NS3 RX][TELEMETRY]"
+                    << " Time=" << Simulator::Now().GetSeconds()
+                    << "s Size=" << p->GetSize()
+                    << " TotalTelemetryRx=" << g_telemetryRx
+                    << std::endl;
          
           zmq_msg_t message;
           zmq_msg_init_size (&message, strlen (string));
