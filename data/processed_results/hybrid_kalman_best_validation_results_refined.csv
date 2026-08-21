@@ -1,0 +1,2 @@
+method,threshold_dbm,rssi_noise_db,aoa_noise_deg,omni_weight,kalman_accel_std,kalman_measurement_std,kalman_gate_m,train_success_rate_pct,train_mean_error_m,train_rmse_error_m,train_p95_error_m,validation_success_rate_pct,validation_mean_error_m,validation_rmse_error_m,validation_p95_error_m,validation_pct_below_1m,validation_pct_below_2m,validation_pct_below_5m
+hybrid_weighted_kalman,-70,1,0.5,0.02,0.5,5,80,100,8.15437268710563,9.98481597091143,18.8109177616234,100,7.82853268974759,9.2534804935457,16.734879427572,4.27350427350427,11.965811965812,34.957264957265
