@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>RF Drone Detection Project Corpus</title>
+  <style>
+    :root { --ink:#17202a; --muted:#5f6b76; --accent:#075985; --line:#d7e0e7; --paper:#fff; --wash:#f4f8fa; }
+    * { box-sizing:border-box; }
+    body { margin:0; color:var(--ink); background:var(--wash); font:16px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif; }
+    header { color:#fff; background:linear-gradient(120deg,#082f49,#0e7490); padding:3.5rem max(5vw,1.25rem); }
+    header p { max-width:70rem; color:#dff6ff; }
+    main { max-width:1200px; margin:-1.5rem auto 3rem; padding:0 1rem; }
+    section { background:var(--paper); border:1px solid var(--line); border-radius:12px; margin:1rem 0; padding:1.25rem; box-shadow:0 8px 22px rgba(8,47,73,.06); }
+    h1,h2 { line-height:1.15; }
+    h1 { margin:0; font-size:clamp(2rem,5vw,3.4rem); }
+    h2 { color:#0c4a6e; }
+    .meta { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:.75rem; }
+    .meta div { border-left:4px solid #0891b2; padding:.5rem .75rem; background:#ecfeff; }
+    .notice { border-left:5px solid #d97706; background:#fffbeb; padding:.8rem 1rem; }
+    .controls { display:flex; gap:.75rem; flex-wrap:wrap; align-items:center; margin-bottom:1rem; }
+    input,select { padding:.65rem; border:1px solid #aab8c2; border-radius:6px; font:inherit; }
+    input { flex:1; min-width:240px; }
+    .table-wrap { overflow:auto; }
+    table { width:100%; border-collapse:collapse; font-size:.92rem; }
+    th,td { text-align:left; vertical-align:top; padding:.65rem; border-bottom:1px solid var(--line); }
+    th { position:sticky; top:0; color:#fff; background:#0c4a6e; }
+    tr:hover td { background:#f0f9ff; }
+    a { color:var(--accent); font-weight:600; }
+    code { overflow-wrap:anywhere; }
+    .tag { display:inline-block; padding:.12rem .5rem; border-radius:999px; color:#075985; background:#e0f2fe; white-space:nowrap; }
+    footer { color:var(--muted); text-align:center; padding:1rem; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>RF Drone Detection Project Corpus</h1>
+    <p>Indexed artefacts for an individual project evaluating passive RF sensor layouts and localisation around a simulated prison-style protected facility.</p>
+  </header>
+  <main>
+    <section>
+      <h2>Corpus information</h2>
+      <div class="meta">
+        <div><strong>Author</strong><br>Pratyush</div>
+        <div><strong>Project type</strong><br>Individual project</div>
+        <div><strong>Index date</strong><br>20 August 2026</div>
+        <div><strong>Core dataset</strong><br>100 deterministic ingress routes</div>
+      </div>
+      <p><a href="README.md">Project overview</a> · <a href="documentation/reproduction.md">Reproduction guide</a> · <a href="documentation/results_manifest.md">Results manifest</a> · <a href="LICENSES_AND_ATTRIBUTION.md">Attribution</a></p>
+      <p class="notice"><strong>Scope note:</strong> the 100-seed tables define reproducible route geometry. The corpus separately contains five complete standard and five tiered-threshold ns-3 RF runs. “Tiered” means that the inner secure-wall sensors use a more sensitive −70 dBm threshold while the outer-perimeter sensors retain the configured experiment threshold; it does not mean that extra sensors were added. The route suite is broad scenario coverage, not every physically possible trajectory.</p>
+      <p><strong>Terminology:</strong> <code>fence24</code> is the internal label for 24 sensors around the modelled prison's outer fence and secure wall. The hybrid layout retains 16 directional RSSI/AoA sensors and changes 8 positions to omnidirectional RSSI anchors. “Hybrid Kalman” means that layout followed by a motion-predicting Kalman filter that smooths noisy position measurements.</p>
+    </section>
+    <section>
+      <h2>Indexed artefacts</h2>
+      <div class="controls">
+        <input id="search" type="search" placeholder="Filter by filename or description" aria-label="Filter artefacts">
+        <select id="category" aria-label="Filter by category"><option value="">All categories</option></select>
+        <span id="count" aria-live="polite"></span>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Category</th><th>Artefact</th><th>Description</th><th>Author / provenance</th></tr></thead>
+          <tbody id="items"></tbody>
+        </table>
+      </div>
+      <noscript>This index requires JavaScript to render its static embedded artefact list.</noscript>
+    </section>
+  </main>
+  <footer>Open this file from the downloaded corpus ZIP or repository clone; all artefact links are relative and portable.</footer>
+  <script>
+    const own = "Pratyush";
+    const adapted = "Pratyush (adapted from FlyNetSim/ns-3)";
+    const A = [];
+    const add = (category,path,description,author=own) => A.push({category,path,description,author});
+
+    add("Corpus documentation","README.md","Project overview, design, repository guide, and principal findings");
+    add("Corpus documentation","LICENSES_AND_ATTRIBUTION.md","Authorship, third-party licences, and attribution");
+    add("Corpus documentation","documentation/experiment_parameters.md","Site, RF, route, and sensing parameters");
+    add("Corpus documentation","documentation/reproduction.md","Saved-data and full-simulator reproduction guide");
+    add("Corpus documentation","documentation/results_manifest.md","Mapping from inputs and scripts to evidence");
+    add("Corpus documentation","documentation/testing_and_validation.md","Testing and validation record");
+    add("Corpus documentation","documentation/limitations.md","Scope, assumptions, and limitations");
+    add("Third-party attribution","third_party/flynetsim_attribution.md","FlyNetSim role, upstream baseline, and excluded dependencies",adapted);
+
+    add("FlyNetSim integration","code/flynetsim_integration/FlyNetSim.py","Modified launcher with selectable RF scenarios, layouts, paths, seeds, and thresholds",adapted);
+    for (const s of [
+      ["friis_baseline","uav-net-sim-friis-test.cc","Passive Friis RF baseline and layout experiment"],
+      ["prison_rf_detection","uav-net-sim-prison-sensor.cc","Principal prison RF detection, path, sensor, and CSV-logging scenario"],
+      ["range_baseline","uav-net-sim-range-test.cc","Communication range and packet-reception baseline"]
+    ]) {
+      add("ns-3 source",`code/ns3/${s[0]}/${s[1]}`,s[2],adapted);
+      for (const f of ["myApps.cc","myApps.h","myInput.cc","myInput.h"])
+        add("ns-3 source",`code/ns3/${s[0]}/${f}`,`Scenario support source for ${s[0].replaceAll("_"," ")}`,adapted);
+    }
+
+    const matlab = {
+      "Scenario generation": ["scenario_generation/generate_100_seed_waypoint_tables.m"],
+      "MATLAB localisation": ["localisation/drone_localisation_common_timestamp_kalman_noise.m","localisation/drone_localisation_random_paths_kalman_noise_fast.m","localisation/drone_localisation_random_paths_noise.m","localisation/robustWeightedLeastSquares2d.m","localisation/trilaterate2d.m","localisation/weightedLeastSquares2d.m"],
+      "Layout and Kalman-filter analysis": ["sensor_layouts/aoa_fence24_kalman.m","sensor_layouts/aoa_opt_kalman.m","sensor_layouts/tune_hybrid_kalman_fence24.m"],
+      "Simulink preparation": ["simulink/build_prison_rf_hybrid_kalman_simulink_model.m","simulink/build_prison_rf_simulink_model.m","simulink/prepare_simulink_fence24_dataset.m","simulink/prepare_simulink_hybrid_kalman_dataset.m"]
+    };
+    for (const [category,files] of Object.entries(matlab)) for (const f of files)
+      add(category,`code/matlab/${f}`,f.split("/").at(-1).replaceAll("_"," ").replace(".m",""));
+    add("MATLAB support","code/matlab/corpus_paths.m","Portable repository path resolver used by all MATLAB workflows");
+
+    for (const f of ["random_waypoint_100_seed_wide.csv","random_waypoint_100_seed_long.csv","random_waypoint_100_seed_path_samples.csv","random_waypoint_100_seed_coverage_summary.csv"])
+      add("100-seed route data",`data/100_seed_scenarios/${f}`,f.replaceAll("_"," ").replace(".csv",""));
+    for (let seed=1; seed<=5; seed++) {
+      add("Standard 24-sensor RF dataset",`data/ns3_rf_measurements/fence24_uniform/prison_fence24_random_seed${seed}_-60.csv`,`Seed ${seed} observations with one −60 dBm detection threshold used by all 24 sensors`);
+      add("Tiered-threshold 24-sensor RF dataset",`data/ns3_rf_measurements/fence24_tiered_wall/prison_fence24_tiered_wall_random_seed${seed}_-60.csv`,`Seed ${seed} observations with a more sensitive −70 dBm threshold at the inner secure wall`);
+    }
+    for (const f of ["aoa_fence24_sensor_layout.csv","aoa_opt_sensor_layout.csv","simulink_fence24_directional_sensors.csv","simulink_hybrid_kalman_sensors.csv"])
+      add("Sensor layout data",`data/sensor_layouts/${f}`,f.replaceAll("_"," ").replace(".csv",""));
+    for (const f of ["aoa_fence24_kalman_summary.csv","aoa_rssi_kalman_summary.csv","hybrid_kalman_best_validation_estimates_refined.csv","hybrid_kalman_best_validation_results_refined.csv","hybrid_kalman_tuning_summary_refined.csv","prison_fence24_random_paths_kalman_noise_fast_summary.csv","prison_fence24_random_paths_noise_summary.csv"])
+      add("Processed results",`data/processed_results/${f}`,f.replaceAll("_"," ").replace(".csv",""));
+    for (const f of ["simulink_fence24_directional_measurements.csv","simulink_fence24_directional_model_results.csv","simulink_fence24_directional_model_summary.csv","simulink_fence24_directional_reference_estimates.csv","simulink_hybrid_kalman_measurements.csv","simulink_hybrid_kalman_model_results.csv","simulink_hybrid_kalman_model_summary.csv","simulink_hybrid_kalman_reference_estimates.csv"])
+      add("Simulink data",`data/simulink/${f}`,f.replaceAll("_"," ").replace(".csv",""));
+
+    const figs = {
+      "Scenario figures":["scenario_coverage/random_waypoint_100_seed_boundary_points.png","scenario_coverage/random_waypoint_100_seed_entry_region_counts.png","scenario_coverage/random_waypoint_100_seed_paths.png","scenario_coverage/random_waypoint_100_seed_start_points.png"],
+      "Layout figures":["sensor_layouts/all_directional_fence24_layout.png","sensor_layouts/aoa_fence24_layout.png","sensor_layouts/aoa_opt_sensor_layout.png"],
+      "Localisation figures":["localisation/aoa_opt_kalman_below_1m.png","localisation/aoa_opt_kalman_p95.png","localisation/aoa_opt_kalman_rmse.png","localisation/hybrid_kalman_best_validation_path.png","localisation/hybrid_kalman_validation_rmse_by_threshold.png","localisation/hybrid_kalman_validation_success_by_threshold.png"],
+      "Simulink figures":["simulink/simulink_fence24_detection_count.png","simulink/simulink_fence24_error_over_time.png","simulink/simulink_fence24_true_vs_estimated_path.png","simulink/simulink_hybrid_kalman_detection_count.png","simulink/simulink_hybrid_kalman_error_over_time.png","simulink/simulink_hybrid_kalman_path.png"]
+    };
+    for (const [category,files] of Object.entries(figs)) for (const f of files)
+      add(category,`figures/${f}`,f.split("/").at(-1).replaceAll("_"," ").replace(".png",""));
+    add("Simulink models","models/prison_rf_sensor_localisation_model.slx","All-directional RSSI/AoA time-domain validation model");
+    add("Simulink models","models/prison_rf_hybrid_kalman_model.slx","Hybrid 16-directional/8-omnidirectional sensor model with constant-velocity Kalman filtering");
+
+    const tbody=document.querySelector("#items"), search=document.querySelector("#search"), category=document.querySelector("#category"), count=document.querySelector("#count");
+    for (const c of [...new Set(A.map(x=>x.category))].sort()) category.add(new Option(c,c));
+    const esc=s=>s.replace(/[&<>\"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+    function render(){
+      const q=search.value.toLowerCase(), c=category.value;
+      const rows=A.filter(x=>(!c||x.category===c)&&(`${x.path} ${x.description} ${x.author}`.toLowerCase().includes(q)));
+      tbody.innerHTML=rows.map(x=>`<tr><td><span class="tag">${esc(x.category)}</span></td><td><a href="${encodeURI(x.path)}"><code>${esc(x.path.split("/").at(-1))}</code></a></td><td>${esc(x.description)}</td><td>${esc(x.author)}</td></tr>`).join("");
+      count.textContent=`${rows.length} of ${A.length} items`;
+    }
+    search.addEventListener("input",render); category.addEventListener("change",render); render();
+  </script>
+</body>
+</html>
