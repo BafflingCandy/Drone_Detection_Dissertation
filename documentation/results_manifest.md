@@ -13,7 +13,7 @@ This manifest maps the principal claims to source data, analysis, and output fig
 | All-directional Simulink validation | Saved Simulink inputs | `prison_rf_sensor_localisation_model.slx` | Directional model result/summary CSVs and figures |
 | Hybrid-layout Kalman-filter Simulink validation | Saved Simulink inputs | `prison_rf_hybrid_kalman_model.slx` | Hybrid model result/summary CSVs and figures |
 
-The refined MATLAB tuning result and the Simulink validation do not use identical Kalman parameters. The refined MATLAB search selected acceleration and measurement standard deviations of 0.5 and 5; the saved representative Simulink model uses the earlier 0.2 and 3 candidate. Both use a −70 dBm hybrid threshold, 0.02 omnidirectional-measurement weight, and 80 m residual gate. The Simulink model is retained as implementation-form validation of the pipeline and qualitative trade-off, not as a direct rerun of the refined optimum.
+The refined MATLAB tuning and representative Simulink validation both use acceleration and measurement standard deviations of 0.5 and 5, a −70 dBm hybrid threshold, 0.02 omnidirectional-measurement weight, and an 80 m residual gate. The Simulink run uses the selected seed-4 validation path rather than repeating the complete multi-route tuning experiment.
 
 ## Interpretation rule
 
