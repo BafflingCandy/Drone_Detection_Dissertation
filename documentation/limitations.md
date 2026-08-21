@@ -8,6 +8,6 @@
 - Only five complete standard and five tiered-threshold ns-3 random-seed RF outputs are archived in the core corpus. The tiered profile changes secure-wall sensitivity; it does not add sensors.
 - Sensor costs, antenna patterns, legal placement constraints, and prison operations were not physically validated.
 - Simulink results are representative time-domain validation, not a replacement for multi-path statistical evaluation.
-- The saved Simulink hybrid model uses an earlier Kalman parameter candidate (acceleration/measurement standard deviations 0.2/3) rather than the later refined MATLAB selection (0.5/5), so their numerical results are not a like-for-like replication.
+- The saved Simulink hybrid model uses the refined Kalman parameters (acceleration/measurement standard deviations 0.5/5), but represents one selected seed-4 validation path rather than the complete multi-route tuning experiment.
 - The upstream FlyNetSim stack is based on historical dependencies and may be difficult to rebuild on a modern host.
 - Reported simulation performance should not be interpreted as deployment readiness.

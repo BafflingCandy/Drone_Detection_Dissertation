@@ -8,8 +8,8 @@ paths = corpus_paths();
 % Uses the best tuned hybrid configuration found in MATLAB:
 %   threshold = -70 dBm
 %   omni RSSI weight = 0.02
-%   Kalman accel std = 0.2
-%   Kalman measurement std = 3
+%   Kalman accel std = 0.5
+%   Kalman measurement std = 5
 %   Kalman residual gate = 80 m
 % This prepares a single representative validation path for a Simulink
 % comparison model. No ns-3 run is required.
@@ -28,8 +28,8 @@ thresholdDbm = -70;
 rssiSigmaDb = 1.0;
 aoaSigmaDeg = 0.5;
 omniWeight = 0.02;
-kalmanAccelStd = 0.2;
-kalmanMeasurementStd = 3;
+kalmanAccelStd = 0.5;
+kalmanMeasurementStd = 5;
 kalmanGateM = 80;
 frequencyHz = 2.4e9;
 txPowerDbm = 20;

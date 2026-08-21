@@ -66,7 +66,7 @@ The corpus also contains five complete ns-3 runs for the standard 24-sensor pris
 - **Kalman filtering:** a recursive tracking method that predicts the drone's next position from its recent motion and combines that prediction with new noisy measurements.
 - **Hybrid Kalman configuration:** the hybrid sensor layout followed by weighted measurement fusion, constant-velocity Kalman filtering, and rejection of implausibly large measurement updates.
 
-The refined multi-route MATLAB tuning and the representative Simulink validation are related but distinct experiments. The refined MATLAB search selected acceleration/measurement standard-deviation parameters of 0.5 and 5, whereas the saved Simulink model validates an earlier candidate using 0.2 and 3. Their results should therefore be compared at the level of the observed accuracy-versus-continuity trade-off, not treated as duplicate runs with identical filter parameters.
+The refined multi-route MATLAB tuning selected acceleration/measurement standard-deviation parameters of 0.5 and 5. The representative Simulink validation uses the same Kalman parameters, together with the same −70 dBm threshold, 0.02 omnidirectional-measurement weight, and 80 m residual gate, on its selected validation path.
 
 ## Repository structure
 
